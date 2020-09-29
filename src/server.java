@@ -1,11 +1,13 @@
 import java.net.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class server {
     public static void main(String[] args)throws IOException{
         ServerSocket serverSocket = null;
         Socket socket = null;
+        byte[] socketFile = new byte[0];
 
         try {
              serverSocket = new ServerSocket(4999);
@@ -36,8 +38,25 @@ public class server {
         InputStream inStream = socket.getInputStream();
         DataInputStream dIn = new DataInputStream(inStream);
 
-        String message = dIn.readUTF();
-        System.out.println("Message from client: "+ message);
+        int fileSize = dIn.readInt();
+        System.out.printf("filesize %d",fileSize);
+        if(fileSize > 0) {
+            socketFile = new byte[fileSize];
+        }
+        
+        dIn.readFully(socketFile);
+        String s = new String(socketFile, StandardCharsets.UTF_8);
+
+        for(int i = 0; i<socketFile.length; i++){
+            System.out.printf("%d ",socketFile[i]);
+        }
+
+//        for(int i = 0; i< socketFile.length; i++){
+//            System.out.printf("",socketFile[i]);
+//        }
+
+        //String message = dIn.readUTF();
+        //System.out.println("Message from client: "+ message);
 
         socket.close();
         serverSocket.close();
