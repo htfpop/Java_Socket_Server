@@ -1,5 +1,6 @@
 import java.net.*;
 import java.io.*;
+import java.util.Arrays;
 
 public class server {
     public static void main(String[] args)throws IOException{
@@ -9,6 +10,7 @@ public class server {
         try {
              serverSocket = new ServerSocket(4999);
              socket = serverSocket.accept();
+
         }
         catch (SecurityException e){
             System.out.println("SERVER ERROR: Security manager blocked creation of socket\r\nExiting Program.");
@@ -27,8 +29,18 @@ public class server {
 
 
         System.out.println("Connection to client has been established!");
+        String[] clientRawIP = socket.getInetAddress().toString().split("/");
+        String clientIP = clientRawIP[1];
+        System.out.println("Client ip address: " + clientIP + " on port "+ socket.getLocalPort());
+
+        InputStream inStream = socket.getInputStream();
+        DataInputStream dIn = new DataInputStream(inStream);
+
+        String message = dIn.readUTF();
+        System.out.println("Message from client: "+ message);
 
         socket.close();
+        serverSocket.close();
 
     }
 }
