@@ -6,7 +6,6 @@ public class server {
     public static void main(String[] args)throws IOException{
         ServerSocket serverSocket = null;
         Socket socket = null;
-        byte[] socketFile = new byte[0];
 
         try {
              serverSocket = new ServerSocket(4999);
@@ -38,29 +37,31 @@ public class server {
         DataInputStream dIn = new DataInputStream(inStream);
 
         int fileSize = dIn.readInt();
-        System.out.printf("filesize %d",fileSize);
-        if(fileSize > 0) {
-            socketFile = new byte[fileSize];
-        }
+        System.out.printf("filesize %d\r\n",fileSize);
+        byte[] socketFile = new byte[fileSize];
 
-        socketFile = dIn.readAllBytes();
+        dIn.readFully(socketFile);
 
-        //dIn.readFully(socketFile);
+        //socketFile = dIn.readAllBytes();
+
         String s = new String(socketFile, StandardCharsets.UTF_8);
 
-        for(int i = 0; i<socketFile.length; i++){
-            System.out.printf("%d ",socketFile[i]);
+        for (byte b : socketFile) {
+            System.out.printf("%c ", b);
         }
-
-//        for(int i = 0; i< socketFile.length; i++){
-//            System.out.printf("",socketFile[i]);
-//        }
-
-        //String message = dIn.readUTF();
-        //System.out.println("Message from client: "+ message);
 
         socket.close();
         serverSocket.close();
 
     }
 }
+
+
+
+//dIn.readFully(socketFile);
+//        for(int i = 0; i< socketFile.length; i++){
+//            System.out.printf("",socketFile[i]);
+//        }
+
+//String message = dIn.readUTF();
+//System.out.println("Message from client: "+ message);
