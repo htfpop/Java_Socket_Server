@@ -37,7 +37,6 @@ public class client {
 
         FileInputStream FIS = new FileInputStream(inFile);
 
-
         long fileSize = inFile.length();
         byte[] fileData = new byte[(int)fileSize];
         FIS.read(fileData);
