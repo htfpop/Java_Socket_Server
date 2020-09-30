@@ -2,14 +2,16 @@ import java.net.*;
 import java.io.*;
 public class client {
     public static void main(String[] args)throws IOException{
-        if(args.length < 2){
+        if(args.length < 3){
             System.out.println("Error! Missing arguments!\r\nUsage: java client <Server IP> <Input Data File> <Output Data File>");
             System.out.println("Exiting Now..");
             System.exit(-1);
         }
         String serverIPAddr = args[0];
         String argFile = args[1];
+        String outFile = args[2];
         File inFile = new File(argFile);
+        FileOutputStream clientReturnFile = new FileOutputStream(outFile);
 
 
         Socket socket = null;
@@ -61,13 +63,19 @@ public class client {
         dIn.readFully(returnFile);
 
 
-        for(int i = 0; i < returnFile.length; i++) {
-            if(returnFile[i] != fileData[i])
-                System.out.printf("MISMATCH FOUND! Index %d\r\n", i);
+        System.out.println("-----RETURN FILE BELOW-----");
+        for(byte b : returnFile){
+            System.out.printf("%c",b);
         }
 
+        for(int i = 0; i < returnFile.length; i++) {
+            if(returnFile[i] != fileData[i])
+                System.out.printf("\r\nMISMATCH FOUND! Index %d\r\n", i);
+        }
 
-        System.out.println("End of session! Closing socket");
+        clientReturnFile.write(returnFile);
+
+        System.out.println("\r\nEnd of session! Closing socket");
 
         dOut.close();
         dIn.close();
