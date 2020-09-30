@@ -1,6 +1,5 @@
 import java.net.*;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 
 public class server {
     public static void main(String[] args)throws IOException{
@@ -22,58 +21,56 @@ public class server {
                                "\r\nExiting Program.");
             System.exit(-1);
         }
-        catch (IOException e){
-            System.out.println("SERVER ERROR: Could not create socket (IOException Throw)\r\nExiting Program.");
-            System.exit(-1);
-        }
-
-
-        System.out.println("Connection to client has been established!");
-        String[] clientRawIP = socket.getInetAddress().toString().split("/");
-        String clientIP = clientRawIP[1];
-        System.out.println("Client ip address: " + clientIP + " on port "+ socket.getLocalPort());
 
         InputStream inStream = socket.getInputStream();
         DataInputStream dIn = new DataInputStream(inStream);
         OutputStream outStream = socket.getOutputStream();
         DataOutputStream dOut = new DataOutputStream(outStream);
 
-        int fileSize = dIn.readInt();
-        System.out.printf("filesize %d\r\n",fileSize);
-        byte[] socketFile = new byte[fileSize];
+        System.out.println("[NOTICE] Connection to client has been established!");
+        String[] clientRawIP = socket.getInetAddress().toString().split("/");
+        String clientIP = clientRawIP[1];
+        System.out.println("[NOTICE] Client ip address: " + clientIP + " on port "+ socket.getLocalPort());
 
-        dIn.readFully(socketFile);
+        //Obtaining file size from client
+        int clientFileSize = dIn.readInt();
+        if(clientFileSize <= 0){
+            System.out.println("[ERROR] Client file size is less than or equal to zero. Please check client input! Exiting..");
+            System.exit(-1);
+        }
 
-        //writing byte array length over
-        dOut.writeInt(socketFile.length);
+        System.out.printf("[RX] Receiving file size: %d bytes\r\n",clientFileSize);
+        byte[] clientPayload = new byte[clientFileSize];
+
+        //Trying to read data from buffer sent by client
+        try{
+            dIn.readFully(clientPayload);
+            System.out.println("[RX] Receiving payload from client");
+        }
+        catch(NullPointerException e){
+            System.out.println("[ERROR] Null pointer exception thrown when trying to read data input stream. Exiting..");
+            System.exit(-1);
+        }
+        catch(EOFException e){
+            System.out.println("[ERROR] Reached EOF before reading all of the bytes. Exiting..");
+            System.exit(-1);
+        }
+
+        //Writing length back to client
+        dOut.writeInt(clientPayload.length);
         dOut.flush();
+        System.out.println("[TX] Transmitting file size to client");
 
-        //Sending Over byte array
-        dOut.write(socketFile);
+        //Sending Over byte array to client
+        dOut.write(clientPayload);
         dOut.flush();
+        System.out.println("[TX] Transmitting payload to client");
+
+        System.out.println("[NOTICE] Server has finished its procedures. Closing I/O Streams and closing socket..");
 
         dOut.close();
         dIn.close();
         socket.close();
         serverSocket.close();
-
     }
 }
-
-
-
-//dIn.readFully(socketFile);
-//        for(int i = 0; i< socketFile.length; i++){
-//            System.out.printf("",socketFile[i]);
-//        }
-
-//socketFile = dIn.readAllBytes();
-
-//String message = dIn.readUTF();
-//System.out.println("Message from client: "+ message);
-
-//String s = new String(socketFile, StandardCharsets.UTF_8);
-
-//        for (byte b : socketFile) {
-//            System.out.printf("%c ", b);
-//        }

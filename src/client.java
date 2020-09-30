@@ -8,10 +8,11 @@ public class client {
             System.exit(-1);
         }
         String serverIPAddr = args[0];
-        String argFile = args[1];
-        String outFile = args[2];
-        File inFile = new File(argFile);
-        FileOutputStream clientReturnFile = new FileOutputStream(outFile);
+        String inputDataFile = args[1];
+        String outputDataFile = args[2];
+
+        File inFile = new File(inputDataFile);
+        FileOutputStream clientReturnFile = new FileOutputStream(outputDataFile);
 
 
         Socket socket = null;
@@ -26,10 +27,6 @@ public class client {
             System.out.println("CLIENT ERROR: Could not create socket since port is out of range." +
                     "\r\nAcceptable ports: 0 and 65535 inclusive" +
                     "\r\nExiting Program.");
-            System.exit(-1);
-        }
-        catch (IOException e){
-            System.out.println("CLIENT ERROR: Could not create socket (IOException Throw)\r\nExiting Program.");
             System.exit(-1);
         }
 
