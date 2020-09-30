@@ -43,8 +43,11 @@ public class server {
         if(fileSize > 0) {
             socketFile = new byte[fileSize];
         }
-        
-        dIn.readFully(socketFile);
+
+
+        socketFile = dIn.readAllBytes();
+
+        //dIn.readFully(socketFile);
         String s = new String(socketFile, StandardCharsets.UTF_8);
 
         for(int i = 0; i<socketFile.length; i++){
