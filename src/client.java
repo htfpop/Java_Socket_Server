@@ -22,8 +22,8 @@ public class client {
         }
         catch (IllegalArgumentException e){
             System.out.println("CLIENT ERROR: Could not create socket since port is out of range." +
-                               "\r\nAcceptable ports: 0 and 65535 inclusive" +
-                               "\r\nExiting Program.");
+                    "\r\nAcceptable ports: 0 and 65535 inclusive" +
+                    "\r\nExiting Program.");
             System.exit(-1);
         }
         catch (IOException e){
@@ -48,6 +48,7 @@ public class client {
         dOut.flush();
 
 
+        //todo open input stream and have server send back data. with writeInt and create new array. then compare both arrays
         //dOut.writeUTF("Hello this is the client!");
         //dOut.flush();
         dOut.close();
