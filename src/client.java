@@ -39,7 +39,7 @@ public class client {
 
         long fileSize = inFile.length();
         byte[] fileData = new byte[(int)fileSize];
-        fileData = FIS.readAllBytes();
+        FIS.read(fileData);
 
         dOut.writeInt((int)fileSize);
         dOut.flush();
