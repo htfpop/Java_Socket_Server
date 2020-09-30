@@ -62,7 +62,7 @@ public class client {
         long end = System.nanoTime();
 
         long duration = end - start;
-        System.out.printf("RTT = %d nanoseconds\r\n",duration);
+        System.out.println("RTT = " + duration + " nanoseconds");
 
 //        System.out.println("-----RETURN FILE BELOW-----");
 //        for(byte b : returnFile){
@@ -78,6 +78,7 @@ public class client {
 
         System.out.println("\r\nEnd of session! Closing socket");
 
+        FIS.close();
         clientReturnFile.close();
         dOut.close();
         dIn.close();
