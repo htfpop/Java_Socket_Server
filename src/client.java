@@ -44,6 +44,8 @@ public class client {
         dOut.writeInt((int)fileSize);
         dOut.flush();
 
+        long start = System.nanoTime();
+
         dOut.write(fileData);
         dOut.flush();
 
@@ -57,17 +59,20 @@ public class client {
         }
         byte[] returnFile = new byte[returnFileSize];
         dIn.readFully(returnFile);
+        long end = System.nanoTime();
 
+        long duration = end - start;
+        System.out.printf("RTT = %d nanoseconds\r\n",duration);
 
-        System.out.println("-----RETURN FILE BELOW-----");
-        for(byte b : returnFile){
-            System.out.printf("%c",b);
-        }
-
-        for(int i = 0; i < returnFile.length; i++) {
-            if(returnFile[i] != fileData[i])
-                System.out.printf("\r\nMISMATCH FOUND! Index %d\r\n", i);
-        }
+//        System.out.println("-----RETURN FILE BELOW-----");
+//        for(byte b : returnFile){
+//            System.out.printf("%c",b);
+//        }
+//
+//        for(int i = 0; i < returnFile.length; i++) {
+//            if(returnFile[i] != fileData[i])
+//                System.out.printf("\r\nMISMATCH FOUND! Index %d\r\n", i);
+//        }
 
         clientReturnFile.write(returnFile);
 
