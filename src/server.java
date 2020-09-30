@@ -1,7 +1,6 @@
 import java.net.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 public class server {
     public static void main(String[] args)throws IOException{
@@ -43,7 +42,6 @@ public class server {
         if(fileSize > 0) {
             socketFile = new byte[fileSize];
         }
-
 
         socketFile = dIn.readAllBytes();
 
