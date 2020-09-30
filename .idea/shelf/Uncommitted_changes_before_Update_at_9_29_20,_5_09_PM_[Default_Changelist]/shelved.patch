@@ -1,0 +1,20 @@
+Index: src/client.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import java.net.*;\nimport java.io.*;\npublic class client {\n    public static void main(String[] args)throws IOException{\n        if(args.length < 2){\n            System.out.println(\"Error! Missing arguments!\\r\\nUsage: java client <Server IP> <Input Data File> <Output Data File>\");\n            System.out.println(\"Exiting Now..\");\n            System.exit(-1);\n        }\n        String serverIPAddr = args[0];\n        String argFile = args[1];\n        File inFile = new File(argFile);\n\n\n        Socket socket = null;\n        try {\n            socket = new Socket(serverIPAddr, 4999);\n        }\n        catch (SecurityException e){\n            System.out.println(\"CLIENT ERROR: Security manager blocked creation of socket\\r\\nExiting Program.\");\n            System.exit(-1);\n        }\n        catch (IllegalArgumentException e){\n            System.out.println(\"CLIENT ERROR: Could not create socket since port is out of range.\" +\n                               \"\\r\\nAcceptable ports: 0 and 65535 inclusive\" +\n                               \"\\r\\nExiting Program.\");\n            System.exit(-1);\n        }\n        catch (IOException e){\n            System.out.println(\"CLIENT ERROR: Could not create socket (IOException Throw)\\r\\nExiting Program.\");\n            System.exit(-1);\n        }\n\n        OutputStream outStream = socket.getOutputStream();\n        DataOutputStream dOut = new DataOutputStream(outStream);\n\n        FileInputStream FIS = new FileInputStream(inFile);\n\n\n        long fileSize = inFile.length();\n        byte[] fileData = new byte[(int)fileSize];\n        FIS.read(fileData);\n\n        dOut.writeInt((int)fileSize);\n        dOut.flush();\n\n        dOut.write(fileData);\n        dOut.flush();\n\n\n        //dOut.writeUTF(\"Hello this is the client!\");\n        //dOut.flush();\n        dOut.close();\n\n        System.out.println(\"End of session! Closing socket\");\n        socket.close();\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/client.java	(revision 421dc4187ab379ae216db0c08b737cd582e62658)
++++ src/client.java	(date 1601424053845)
+@@ -22,8 +22,8 @@
+         }
+         catch (IllegalArgumentException e){
+             System.out.println("CLIENT ERROR: Could not create socket since port is out of range." +
+-                               "\r\nAcceptable ports: 0 and 65535 inclusive" +
+-                               "\r\nExiting Program.");
++                    "\r\nAcceptable ports: 0 and 65535 inclusive" +
++                    "\r\nExiting Program.");
+             System.exit(-1);
+         }
+         catch (IOException e){

@@ -44,7 +44,6 @@ public class server {
 
         dIn.readFully(socketFile);
 
-        //todo send back socketFile using dOut.WriteInt(socketFile.length) dOut.write(socketFile);
         //writing byte array length over
         dOut.writeInt(socketFile.length);
         dOut.flush();
