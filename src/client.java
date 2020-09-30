@@ -74,6 +74,7 @@ public class client {
 
         System.out.println("\r\nEnd of session! Closing socket");
 
+        clientReturnFile.close();
         dOut.close();
         dIn.close();
         socket.close();
