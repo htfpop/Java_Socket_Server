@@ -33,6 +33,8 @@ public class client {
 
         OutputStream outStream = socket.getOutputStream();
         DataOutputStream dOut = new DataOutputStream(outStream);
+        InputStream inStream = socket.getInputStream();
+        DataInputStream dIn = new DataInputStream(inStream);
 
         FileInputStream FIS = new FileInputStream(inFile);
 
@@ -47,13 +49,28 @@ public class client {
         dOut.write(fileData);
         dOut.flush();
 
+        int returnFileSize = dIn.readInt(); // return file size
+        System.out.printf("Return file size is: %d\r\n",returnFileSize);
+        if(returnFileSize != fileSize)
+        {
+            System.out.println("Error, server did not send back correct byte array size");
+            System.exit(-1);
+            socket.close();
+        }
+        byte[] returnFile = new byte[returnFileSize];
+        dIn.readFully(returnFile);
 
-        //todo open input stream and have server send back data. with writeInt and create new array. then compare both arrays
-        //dOut.writeUTF("Hello this is the client!");
-        //dOut.flush();
-        dOut.close();
+
+        for(int i = 0; i < returnFile.length; i++) {
+            if(returnFile[i] != fileData[i])
+                System.out.printf("MISMATCH FOUND! Index %d\r\n", i);
+        }
+
 
         System.out.println("End of session! Closing socket");
+
+        dOut.close();
+        dIn.close();
         socket.close();
     }
 }

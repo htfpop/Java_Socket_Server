@@ -35,6 +35,8 @@ public class server {
 
         InputStream inStream = socket.getInputStream();
         DataInputStream dIn = new DataInputStream(inStream);
+        OutputStream outStream = socket.getOutputStream();
+        DataOutputStream dOut = new DataOutputStream(outStream);
 
         int fileSize = dIn.readInt();
         System.out.printf("filesize %d\r\n",fileSize);
@@ -42,14 +44,17 @@ public class server {
 
         dIn.readFully(socketFile);
 
-        //socketFile = dIn.readAllBytes();
+        //todo send back socketFile using dOut.WriteInt(socketFile.length) dOut.write(socketFile);
+        //writing byte array length over
+        dOut.writeInt(socketFile.length);
+        dOut.flush();
 
-        String s = new String(socketFile, StandardCharsets.UTF_8);
+        //Sending Over byte array
+        dOut.write(socketFile);
+        dOut.flush();
 
-        for (byte b : socketFile) {
-            System.out.printf("%c ", b);
-        }
-
+        dOut.close();
+        dIn.close();
         socket.close();
         serverSocket.close();
 
@@ -63,5 +68,13 @@ public class server {
 //            System.out.printf("",socketFile[i]);
 //        }
 
+//socketFile = dIn.readAllBytes();
+
 //String message = dIn.readUTF();
 //System.out.println("Message from client: "+ message);
+
+//String s = new String(socketFile, StandardCharsets.UTF_8);
+
+//        for (byte b : socketFile) {
+//            System.out.printf("%c ", b);
+//        }
