@@ -57,7 +57,7 @@ public class client {
             System.exit(-1);
             socket.close();
         }
-        byte[] returnFile = new byte[returnFileSize];
+        byte[] returnFile = new byte[503];
         dIn.readFully(returnFile);
         long end = System.nanoTime();
 
