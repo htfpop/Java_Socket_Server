@@ -19,8 +19,6 @@ public class client {
         long startRTT = 0;
         long endRTT = 0;
 
-
-
         Socket socket = null;
         try {
             socket = new Socket(serverIPAddr, 4999);
@@ -53,7 +51,6 @@ public class client {
         dOut.flush();
 
         startRTT = System.nanoTime();
-
         dOut.write(fileData);
         dOut.flush();
 
