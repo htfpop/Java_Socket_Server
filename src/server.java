@@ -44,6 +44,7 @@ public class server {
         System.out.printf("[RX] Receiving file size: %d bytes\r\n",clientFileSize);
         clientPayload = new byte[clientFileSize];
 
+
         //Trying to read data from buffer sent by client
         try{
             dIn.readFully(clientPayload);
@@ -71,7 +72,3 @@ public class server {
         serverSocket.close();
     }
 }
-//Writing length back to client
-//        dOut.writeInt(clientPayload.length);
-//        dOut.flush();
-//        System.out.println("[TX] Transmitting file size to client");
