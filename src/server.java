@@ -1,3 +1,10 @@
+/**
+ * Christopher K. Leung
+ * Project #1 - CS3800 Computer Networks
+ * server.java - This program will create a socket on 4999 and listen to incoming connections
+ *               This program will then obtain data from an input buffer and send the data back to the client
+ */
+
 import java.net.*;
 import java.io.*;
 

@@ -1,9 +1,18 @@
+/**
+ * Christopher K. Leung
+ * Project #1 - CS3800 Computer Networks
+ * client.java - This program will take in 3 arguments: <ip address> <input data file> <output data file> and open a
+ *               socket on 4999. It will parse the input data file into a byte array and send this array to the server
+ *               It will then receive this byte array back and close all connections.
+ *               This program also records the time (in nanoseconds).
+ */
+
 import java.net.*;
 import java.io.*;
 public class client {
     public static void main(String[] args)throws IOException{
         if(args.length < 3){
-            System.out.println("Error! Missing arguments!\r\nUsage: java client <Server IP> <Input Data File> <Output Data File>");
+            System.out.println("[ERROR] Missing arguments!\r\nUsage: java client <Server IP> <Input Data File> <Output Data File>");
             System.out.println("Exiting Now..");
             System.exit(-1);
         }
@@ -24,11 +33,11 @@ public class client {
             socket = new Socket(serverIPAddr, 4999);
         }
         catch (SecurityException e){
-            System.out.println("CLIENT ERROR: Security manager blocked creation of socket\r\nExiting Program.");
+            System.out.println("[CLIENT ERROR] Security manager blocked creation of socket\r\nExiting Program.");
             System.exit(-1);
         }
         catch (IllegalArgumentException e){
-            System.out.println("CLIENT ERROR: Could not create socket since port is out of range." +
+            System.out.println("[CLIENT ERROR] Could not create socket since port is out of range." +
                     "\r\nAcceptable ports: 0 and 65535 inclusive" +
                     "\r\nExiting Program.");
             System.exit(-1);
@@ -41,6 +50,7 @@ public class client {
 
         FileInputStream FIS = new FileInputStream(inFile);
 
+        //Obtain file length and send to server
         long fileSize = inFile.length();
         fileData = new byte[(int)fileSize];
         returnFile = new byte[(int)fileSize];
@@ -50,6 +60,7 @@ public class client {
         dOut.writeInt((int)fileSize);
         dOut.flush();
 
+        //Using nanoTime to calculate RTT
         startRTT = System.nanoTime();
         dOut.write(fileData);
         dOut.flush();
@@ -71,23 +82,3 @@ public class client {
         socket.close();
     }
 }
-
-//    int returnFileSize = dIn.readInt(); // return file size
-//        System.out.printf("Return file size is: %d\r\n",returnFileSize);
-//        if(returnFileSize != fileSize)
-//        {
-//            System.out.println("Error, server did not send back correct byte array size");
-//            System.exit(-1);
-//            socket.close();
-//        }
-
-
-//        System.out.println("-----RETURN FILE BELOW-----");
-//        for(byte b : returnFile){
-//            System.out.printf("%c",b);
-//        }
-//
-//        for(int i = 0; i < returnFile.length; i++) {
-//            if(returnFile[i] != fileData[i])
-//                System.out.printf("\r\nMISMATCH FOUND! Index %d\r\n", i);
-//        }
