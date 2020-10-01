@@ -13,6 +13,12 @@ public class client {
 
         File inFile = new File(inputDataFile);
         FileOutputStream clientReturnFile = new FileOutputStream(outputDataFile);
+        byte[] returnFile = null;
+        byte[] fileData = null;
+        long roundTripTime = 0;
+        long startRTT = 0;
+        long endRTT = 0;
+
 
 
         Socket socket = null;
@@ -38,41 +44,24 @@ public class client {
         FileInputStream FIS = new FileInputStream(inFile);
 
         long fileSize = inFile.length();
-        byte[] fileData = new byte[(int)fileSize];
+        fileData = new byte[(int)fileSize];
+        returnFile = new byte[(int)fileSize];
+
         FIS.read(fileData);
 
         dOut.writeInt((int)fileSize);
         dOut.flush();
 
-        long start = System.nanoTime();
+        startRTT = System.nanoTime();
 
         dOut.write(fileData);
         dOut.flush();
 
-        int returnFileSize = dIn.readInt(); // return file size
-        System.out.printf("Return file size is: %d\r\n",returnFileSize);
-        if(returnFileSize != fileSize)
-        {
-            System.out.println("Error, server did not send back correct byte array size");
-            System.exit(-1);
-            socket.close();
-        }
-        byte[] returnFile = new byte[returnFileSize];
         dIn.readFully(returnFile);
-        long end = System.nanoTime();
+        endRTT = System.nanoTime();
 
-        long duration = end - start;
-        System.out.println("RTT = " + duration + " nanoseconds");
-
-//        System.out.println("-----RETURN FILE BELOW-----");
-//        for(byte b : returnFile){
-//            System.out.printf("%c",b);
-//        }
-//
-//        for(int i = 0; i < returnFile.length; i++) {
-//            if(returnFile[i] != fileData[i])
-//                System.out.printf("\r\nMISMATCH FOUND! Index %d\r\n", i);
-//        }
+        roundTripTime = endRTT - startRTT;
+        System.out.println("roundTripTime = " + roundTripTime + " nanoseconds");
 
         clientReturnFile.write(returnFile);
 
@@ -85,3 +74,23 @@ public class client {
         socket.close();
     }
 }
+
+//    int returnFileSize = dIn.readInt(); // return file size
+//        System.out.printf("Return file size is: %d\r\n",returnFileSize);
+//        if(returnFileSize != fileSize)
+//        {
+//            System.out.println("Error, server did not send back correct byte array size");
+//            System.exit(-1);
+//            socket.close();
+//        }
+
+
+//        System.out.println("-----RETURN FILE BELOW-----");
+//        for(byte b : returnFile){
+//            System.out.printf("%c",b);
+//        }
+//
+//        for(int i = 0; i < returnFile.length; i++) {
+//            if(returnFile[i] != fileData[i])
+//                System.out.printf("\r\nMISMATCH FOUND! Index %d\r\n", i);
+//        }

@@ -5,6 +5,8 @@ public class server {
     public static void main(String[] args)throws IOException{
         ServerSocket serverSocket = null;
         Socket socket = null;
+        byte[] clientPayload = null;
+
 
         try {
              serverSocket = new ServerSocket(4999);
@@ -40,7 +42,7 @@ public class server {
         }
 
         System.out.printf("[RX] Receiving file size: %d bytes\r\n",clientFileSize);
-        byte[] clientPayload = new byte[clientFileSize];
+        clientPayload = new byte[clientFileSize];
 
         //Trying to read data from buffer sent by client
         try{
@@ -56,11 +58,6 @@ public class server {
             System.exit(-1);
         }
 
-        //Writing length back to client
-        dOut.writeInt(clientPayload.length);
-        dOut.flush();
-        System.out.println("[TX] Transmitting file size to client");
-
         //Sending Over byte array to client
         dOut.write(clientPayload);
         dOut.flush();
@@ -74,3 +71,7 @@ public class server {
         serverSocket.close();
     }
 }
+//Writing length back to client
+//        dOut.writeInt(clientPayload.length);
+//        dOut.flush();
+//        System.out.println("[TX] Transmitting file size to client");
